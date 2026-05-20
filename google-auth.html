@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in - Google Accounts</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --google-blue: #1a73e8;
+            --google-blue-hover: #1557b0;
+            --google-gray: #5f6368;
+            --google-light-gray: #dadce0;
+            --google-text: #202124;
+            --border-focus: #1a73e8;
+            --error-red: #d93025;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: var(--google-text);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Container & Card Layout */
+        .container {
+            width: 100%;
+            max-width: 450px;
+            padding: 40px;
+            border: 1px solid var(--google-light-gray);
+            border-radius: 8px;
+            background: #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        @media (max-width: 450px) {
+            .container {
+                border: none;
+                max-width: 100%;
+                padding: 24px;
+            }
+        }
+
+        /* Logo */
+        .logo-wrapper {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .google-logo {
+            width: 75px;
+            height: 24px;
+        }
+
+        /* Heading Styles */
+        h1 {
+            font-size: 24px;
+            font-weight: 400;
+            text-align: center;
+            margin-bottom: 8px;
+            color: var(--google-text);
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--google-text);
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .app-name {
+            font-weight: 500;
+            color: #2e7d32; /* Match Saurabh Health's theme color */
+        }
+
+        /* Input Form Elements */
+        .form-group {
+            position: relative;
+            margin-bottom: 26px;
+            width: 100%;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            border: 1px solid var(--google-light-gray);
+            border-radius: 4px;
+            outline: none;
+            color: var(--google-text);
+            background: transparent;
+            transition: border-color 0.2s ease;
+        }
+
+        .input-field:focus {
+            border-color: var(--border-focus);
+            border-width: 2px;
+            padding: 15px; /* Adjust for border width change to maintain height */
+        }
+
+        .input-label {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #ffffff;
+            padding: 0 4px;
+            color: var(--google-gray);
+            font-size: 16px;
+            pointer-events: none;
+            transition: transform 0.2s ease, font-size 0.2s ease, color 0.2s ease;
+        }
+
+        /* Label float effect */
+        .input-field:focus ~ .input-label,
+        .input-field:not(:placeholder-shown) ~ .input-label {
+            transform: translateY(-28px);
+            font-size: 12px;
+            color: var(--google-blue);
+        }
+
+        .input-field:focus ~ .input-label {
+            color: var(--google-blue);
+        }
+
+        .input-field.error {
+            border-color: var(--error-red);
+        }
+
+        .input-field.error ~ .input-label {
+            color: var(--error-red);
+        }
+
+        .error-message {
+            color: var(--error-red);
+            font-size: 12px;
+            margin-top: -20px;
+            margin-bottom: 15px;
+            display: none;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .error-message svg {
+            fill: var(--error-red);
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Links */
+        .forgot-link {
+            color: var(--google-blue);
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 32px;
+            cursor: pointer;
+        }
+
+        .forgot-link:hover {
+            color: var(--google-blue-hover);
+        }
+
+        /* Action Buttons Row */
+        .actions-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .create-btn {
+            color: var(--google-blue);
+            font-size: 14px;
+            font-weight: 500;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .create-btn:hover {
+            background-color: rgba(26, 115, 232, 0.04);
+            color: var(--google-blue-hover);
+        }
+
+        .next-btn {
+            background-color: var(--google-blue);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+            transition: background-color 0.2s, box-shadow 0.2s;
+        }
+
+        .next-btn:hover {
+            background-color: var(--google-blue-hover);
+            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 2px 6px 2px rgba(60,64,67,0.15);
+        }
+
+        .next-btn:active {
+            background-color: #164da4;
+            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+        }
+
+        /* Loading Spinner Screen */
+        .loading-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .loading-spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top-color: #4285f4;
+            animation: spin 1s infinite linear;
+            margin-bottom: 24px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 16px;
+            color: var(--google-gray);
+            font-weight: 400;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 24px;
+            width: 100%;
+            max-width: 450px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--google-gray);
+            padding: 0 8px;
+        }
+
+        footer select {
+            border: none;
+            color: var(--google-gray);
+            background: transparent;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 16px;
+        }
+
+        .footer-links a {
+            color: var(--google-gray);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: var(--google-text);
+        }
+
+        /* Account Chooser Panel (Ultra Premium feature) */
+        .account-chooser {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .account-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--google-light-gray);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .account-item:hover {
+            background-color: rgba(0,0,0,0.02);
+        }
+
+        .account-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #e8f0fe;
+            color: var(--google-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-right: 12px;
+            font-size: 16px;
+        }
+
+        .account-info {
+            flex: 1;
+            text-align: left;
+        }
+
+        .account-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--google-text);
+        }
+
+        .account-email {
+            font-size: 12px;
+            color: var(--google-gray);
+        }
+
+        .use-another-account {
+            color: var(--google-blue);
+            font-size: 14px;
+            font-weight: 500;
+            padding: 16px 0;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .use-another-account:hover {
+            color: var(--google-blue-hover);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="card-container">
+        <!-- Google Logo SVG -->
+        <div class="logo-wrapper">
+            <svg class="google-logo" viewBox="0 0 74 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.8 15.3c-2.3 0-4.3-1.8-4.3-4.3s2-4.3 4.3-4.3c1 0 2 .4 2.7 1.1l1.9-1.9c-1.2-1.1-2.9-1.8-4.6-1.8-3.9 0-7 3.1-7 7s3.1 7 7 7c2 0 3.5-.7 4.6-1.8l-1.9-1.9c-.7.7-1.5 1.1-2.4 1.1z" fill="#ea4335"/>
+                <path d="M16.3 6.1c-3.9 0-7 3.1-7 7s3.1 7 7 7 7-3.1 7-7-3.1-7-7-7zm0 11.2c-2.3 0-4.2-1.9-4.2-4.2s1.9-4.2 4.2-4.2 4.2 1.9 4.2 4.2-1.9 4.2-4.2 4.2z" fill="#fbbc05"/>
+                <path d="M31.2 6.1c-3.9 0-7 3.1-7 7s3.1 7 7 7 7-3.1 7-7-3.1-7-7-7zm0 11.2c-2.3 0-4.2-1.9-4.2-4.2s1.9-4.2 4.2-4.2 4.2 1.9 4.2 4.2-1.9 4.2-4.2 4.2z" fill="#4285f4"/>
+                <path d="M45.7 6.1c-3.7 0-6.7 3-6.7 7s3 7 6.7 7c1.7 0 3.1-.7 4-1.8v1.5c0 2.7-1.5 4.1-3.8 4.1-1.9 0-3.1-1.4-3.6-2.5l-2.8 1.2c.8 2 2.7 4.3 6.4 4.3 3.7 0 6.8-2.2 6.8-7.3V6.5h-3.1v1.3c-.9-1.1-2.4-1.7-3.9-1.7zm.3 11.2c-2.2 0-3.9-1.9-3.9-4.2s1.7-4.2 3.9-4.2 3.9 1.9 3.9 4.2-1.7 4.2-3.9 4.2z" fill="#34a853"/>
+                <path d="M57.6.7h3.3v19.1h-3.3z" fill="#34a853"/>
+                <path d="M68.7 17.3c-1.5 0-2.5-.7-3.2-2l8.8-3.6-3-.7c-.3-1-1.4-3-3.9-3-2.5 0-4.6 2-4.6 5 0 3.7 2.9 5.7 5.9 5.7 2.4 0 3.8-1.5 4.4-2.4l-2.4-1.6c-.6.9-1.3 1.6-2 1.6zm-.2-8.4c1 .3 1.8 1 2.1 1.7L64 13.5c0-2 .9-4.1 4.5-4.6z" fill="#ea4335"/>
+            </svg>
+        </div>
+
+        <!-- Default Sign-In Screen -->
+        <div id="sign-in-screen">
+            <h1>Sign in</h1>
+            <div class="subtitle">to continue to <span class="app-name">Saurabh Health</span></div>
+
+            <form id="oauth-form">
+                <div class="form-group">
+                    <input type="text" id="email" class="input-field" placeholder=" " required autocomplete="username">
+                    <label for="email" class="input-label">Email or phone</label>
+                </div>
+
+                <div class="error-message" id="error-box">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                    <span id="error-text">Enter a valid email address.</span>
+                </div>
+
+                <a class="forgot-link" id="mock-forgot">Forgot email?</a>
+
+                <div class="subtitle" style="font-size: 14px; text-align: left; color: var(--google-gray); margin-bottom: 24px; line-height: 1.5;">
+                    To continue, Google will share your name, email address, language preference, and profile picture with Saurabh Health.
+                </div>
+
+                <div class="actions-row">
+                    <button type="button" class="create-btn" id="create-account-btn">Create account</button>
+                    <button type="submit" class="next-btn" id="next-btn">Next</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Account Selector Screen (Visible when accounts exist in history) -->
+        <div id="account-select-screen" class="account-chooser">
+            <h1>Choose an account</h1>
+            <div class="subtitle" style="margin-bottom: 24px;">to continue to <span class="app-name">Saurabh Health</span></div>
+            
+            <div id="accounts-list-container">
+                <!-- Statically or dynamically generated mock active accounts -->
+            </div>
+
+            <div class="use-another-account" id="use-different-btn">
+                Use another account
+            </div>
+        </div>
+
+        <!-- Loading Screen -->
+        <div class="loading-screen" id="loading-screen">
+            <div class="loading-spinner"></div>
+            <div class="loading-text" id="loading-msg">Connecting securely to Saurabh Health...</div>
+        </div>
+    </div>
+
+    <footer>
+        <select>
+            <option>English (United States)</option>
+            <option>Hindi (हिन्दी)</option>
+            <option>Spanish (Español)</option>
+        </select>
+        <div class="footer-links">
+            <a href="#">Help</a>
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+        </div>
+    </footer>
+
+    <script>
+        const oauthForm = document.getElementById('oauth-form');
+        const emailInput = document.getElementById('email');
+        const errorBox = document.getElementById('error-box');
+        const errorText = document.getElementById('error-text');
+        
+        const signInScreen = document.getElementById('sign-in-screen');
+        const accountSelectScreen = document.getElementById('account-select-screen');
+        const loadingScreen = document.getElementById('loading-screen');
+        
+        const createAccountBtn = document.getElementById('create-account-btn');
+        const useDifferentBtn = document.getElementById('use-different-btn');
+        const accountsListContainer = document.getElementById('accounts-list-container');
+
+        // Check if there are saved google accounts in this browser context
+        const savedGoogleAccounts = JSON.parse(localStorage.getItem('vf_google_accounts') || '[]');
+
+        function init() {
+            if (savedGoogleAccounts.length > 0) {
+                renderAccountsList();
+                showScreen('account-select');
+            } else {
+                showScreen('sign-in');
+            }
+        }
+
+        function showScreen(screen) {
+            signInScreen.style.display = screen === 'sign-in' ? 'block' : 'none';
+            accountSelectScreen.style.display = screen === 'account-select' ? 'flex' : 'none';
+            loadingScreen.style.display = screen === 'loading' ? 'flex' : 'none';
+        }
+
+        function renderAccountsList() {
+            accountsListContainer.innerHTML = savedGoogleAccounts.map(email => {
+                const name = email.split('@')[0];
+                const initial = name.charAt(0).toUpperCase();
+                return `
+                    <div class="account-item" data-email="${email}">
+                        <div class="account-avatar">${initial}</div>
+                        <div class="account-info">
+                            <div class="account-name">${name}</div>
+                            <div class="account-email">${email}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Click listener
+            accountsListContainer.querySelectorAll('.account-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const email = item.dataset.email;
+                    proceedWithAuth(email);
+                });
+            });
+        }
+
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(String(email).toLowerCase());
+        }
+
+        oauthForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = emailInput.value.trim();
+
+            if (!validateEmail(email)) {
+                emailInput.classList.add('error');
+                errorText.textContent = 'Enter a valid email address.';
+                errorBox.style.display = 'flex';
+                return;
+            }
+
+            emailInput.classList.remove('error');
+            errorBox.style.display = 'none';
+
+            // Add email to local cache of google accounts
+            if (!savedGoogleAccounts.includes(email)) {
+                savedGoogleAccounts.push(email);
+                localStorage.setItem('vf_google_accounts', JSON.stringify(savedGoogleAccounts));
+            }
+
+            proceedWithAuth(email);
+        });
+
+        function proceedWithAuth(email) {
+            showScreen('loading');
+            
+            // Artificial delay to make it feel completely realistic
+            setTimeout(() => {
+                const authPayload = {
+                    success: true,
+                    email: email,
+                    provider: 'Google'
+                };
+
+                // Send success message to parent window
+                if (window.opener) {
+                    window.opener.postMessage(authPayload, '*');
+                } else {
+                    // Fallback if not opened in a popup (e.g. iframe or direct integration)
+                    window.parent.postMessage(authPayload, '*');
+                }
+
+                // If standard messaging didn't handle it, try calling parent directly
+                try {
+                    if (window.opener && typeof window.opener.onGoogleAuthSuccess === 'function') {
+                        window.opener.onGoogleAuthSuccess(authPayload);
+                    }
+                } catch(err) {
+                    console.log('Direct call blocked or window closed');
+                }
+
+                // Close popup
+                setTimeout(() => {
+                    window.close();
+                }, 400);
+
+            }, 1800);
+        }
+
+        createAccountBtn.addEventListener('click', () => {
+            emailInput.value = '';
+            emailInput.focus();
+            alert('To create a Google Account, enter your preferred Gmail address in the email field and click Next.');
+        });
+
+        useDifferentBtn.addEventListener('click', () => {
+            showScreen('sign-in');
+        });
+
+        document.getElementById('mock-forgot').addEventListener('click', () => {
+            alert('This is a simulated secure authentication window. Please type your actual Google email or any mock email (e.g., test@gmail.com) to continue.');
+        });
+
+        // Initialize the interface state
+        init();
+    </script>
+</body>
+</html>

@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saurabh Health — Your Premium Health Revolution</title>
+    <meta name="description" content="Track calories, plan diets, discover workouts, and transform your body with Saurabh Health — the premium health & fitness companion.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Three.js for 3D -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- GSAP + ScrollTrigger for scroll animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+</head>
+<body>
+    <!-- 3D Canvas Background -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Floating Particles Overlay -->
+    <div id="particles-overlay"></div>
+
+    <!-- Navigation -->
+    <nav id="main-nav">
+        <div class="nav-inner">
+            <a href="#" class="nav-logo">
+                <span class="logo-icon">💚</span>
+                <span class="logo-text">Saurabh<span class="logo-accent">Health</span></span>
+            </a>
+            <div class="nav-links">
+                <a href="#hero" class="nav-link active" data-section="hero">Home</a>
+                <a href="#calories" class="nav-link" data-section="calories">Calories</a>
+                <a href="#diet" class="nav-link" data-section="diet">Diet</a>
+                <a href="#workout" class="nav-link" data-section="workout">Workout</a>
+                <a href="#tracker" class="nav-link" data-section="tracker">Tracker</a>
+                <a href="#about" class="nav-link" data-section="about">About</a>
+                <a href="#profile" class="nav-link" data-section="profile">Profile</a>
+                <span id="admin-nav-placeholder"></span>
+            </div>
+            <div class="nav-actions">
+                <button id="auth-btn" class="btn btn-glass">Login / Sign up</button>
+            </div>
+            <button id="nav-toggle" class="nav-toggle" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="mobile-menu">
+        <a href="#hero" class="mobile-link">Home</a>
+        <a href="#calories" class="mobile-link">Calories</a>
+        <a href="#diet" class="mobile-link">Diet</a>
+        <a href="#workout" class="mobile-link">Workout</a>
+        <a href="#tracker" class="mobile-link">Tracker</a>
+        <a href="#about" class="mobile-link">About</a>
+        <a href="#profile" class="mobile-link">Profile</a>
+        <span id="admin-mobile-nav-placeholder"></span>
+        <a href="#" class="mobile-link" id="mobile-auth-link">Login / Sign up</a>
+    </div>
+
+    <!-- ===== HERO SECTION ===== -->
+    <section id="hero" class="section hero-section">
+        <div class="hero-content">
+            <div class="hero-badge animate-in">
+                <span class="badge-dot"></span>
+                Your Health Revolution Starts Here
+            </div>
+            <h1 class="hero-title animate-in">
+                Transform Your
+                <span class="gradient-text">Body & Mind</span>
+                with Precision
+            </h1>
+            <p class="hero-subtitle animate-in">
+                Track calories, plan meals, discover targeted workouts, and achieve your fitness goals 
+                with our AI-powered health companion.
+            </p>
+            <div class="hero-actions animate-in">
+                <a href="#calories" class="btn btn-primary">
+                    <span>Start Tracking</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href="#workout" class="btn btn-glass">
+                    <span>Explore Workouts</span>
+                </a>
+            </div>
+            <div id="auth-status" class="hero-auth-status animate-in hidden">Sign in to save your progress and access your personalized tracker.</div>
+            <div class="hero-stats animate-in">
+                <div class="stat-item">
+                    <span class="stat-number" data-count="2500">0</span><span class="stat-suffix">+</span>
+                    <span class="stat-label">Food Items</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number" data-count="350">0</span><span class="stat-suffix">+</span>
+                    <span class="stat-label">Exercises</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number" data-count="50">0</span><span class="stat-suffix">K+</span>
+                    <span class="stat-label">Active Users</span>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-mouse">
+                <div class="scroll-dot"></div>
+            </div>
+            <span>Scroll to explore</span>
+        </div>
+    </section>
+
+    <!-- ===== CALORIE SEARCH SECTION ===== -->
+    <section id="calories" class="section calories-section">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-tag animate-scroll">🔥 Calorie Database</span>
+                <h2 class="section-title animate-scroll">Search <span class="gradient-text">Food Calories</span></h2>
+                <p class="section-desc animate-scroll">Search from our comprehensive database of 2500+ food items to track your daily calorie intake with precision.</p>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-wrapper animate-scroll">
+                <div class="search-bar glass-card">
+                    <svg class="search-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                    <input type="text" id="food-search" placeholder="Search any food... (e.g., banana, chicken breast, rice)" autocomplete="off">
+                    <button id="food-search-btn" class="search-btn">Search</button>
+                </div>
+                <div id="food-suggestions" class="suggestions-dropdown"></div>
+            </div>
+
+            <!-- Search Results -->
+            <div id="food-results" class="food-results"></div>
+
+            <!-- Popular Foods Grid -->
+            <div class="popular-foods">
+                <h3 class="subsection-title animate-scroll">Popular Food Items</h3>
+                <div class="food-grid" id="popular-food-grid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Daily Calorie Calculator -->
+            <div class="calorie-calculator glass-card animate-scroll">
+                <h3 class="calc-title">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>
+                    Daily Calorie Calculator
+                </h3>
+                <div class="calc-form">
+                    <div class="calc-row">
+                        <div class="calc-field">
+                            <label>Gender</label>
+                            <select id="calc-gender">
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                        <div class="calc-field">
+                            <label>Age</label>
+                            <input type="number" id="calc-age" placeholder="25" min="10" max="100">
+                        </div>
+                    </div>
+                    <div class="calc-row">
+                        <div class="calc-field">
+                            <label>Weight (kg)</label>
+                            <input type="number" id="calc-weight" placeholder="70" min="30" max="300">
+                        </div>
+                        <div class="calc-field">
+                            <label>Height (cm)</label>
+                            <input type="number" id="calc-height" placeholder="175" min="100" max="250">
+                        </div>
+                    </div>
+                    <div class="calc-row">
+                        <div class="calc-field full-width">
+                            <label>Activity Level</label>
+                            <select id="calc-activity">
+                                <option value="1.2">Sedentary (little or no exercise)</option>
+                                <option value="1.375">Lightly active (1-3 days/week)</option>
+                                <option value="1.55" selected>Moderately active (3-5 days/week)</option>
+                                <option value="1.725">Very active (6-7 days/week)</option>
+                                <option value="1.9">Extra active (athlete level)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button id="calc-btn" class="btn btn-primary calc-submit">Calculate My Needs</button>
+                </div>
+                <div id="calc-results" class="calc-results hidden">
+                    <div class="result-card">
+                        <span class="result-label">Maintenance</span>
+                        <span class="result-value" id="result-maintenance">—</span>
+                        <span class="result-unit">cal/day</span>
+                    </div>
+                    <div class="result-card accent">
+                        <span class="result-label">Weight Loss</span>
+                        <span class="result-value" id="result-loss">—</span>
+                        <span class="result-unit">cal/day</span>
+                    </div>
+                    <div class="result-card">
+                        <span class="result-label">Weight Gain</span>
+                        <span class="result-value" id="result-gain">—</span>
+                        <span class="result-unit">cal/day</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== DIET PLANNER SECTION ===== -->
+    <section id="diet" class="section diet-section">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-tag animate-scroll">🥗 Diet Planner</span>
+                <h2 class="section-title animate-scroll">Plan Your <span class="gradient-text">Perfect Diet</span></h2>
+                <p class="section-desc animate-scroll">Create customized meal plans, track macros, and build healthy eating habits that last.</p>
+            </div>
+
+            <!-- Diet Goal Selector -->
+            <div class="diet-goals animate-scroll">
+                <button class="goal-card glass-card active" data-goal="lose">
+                    <div class="goal-icon">🏋️</div>
+                    <h4>Weight Loss</h4>
+                    <p>Calorie deficit plans</p>
+                </button>
+                <button class="goal-card glass-card" data-goal="maintain">
+                    <div class="goal-icon">⚖️</div>
+                    <h4>Maintain</h4>
+                    <p>Balance your intake</p>
+                </button>
+                <button class="goal-card glass-card" data-goal="gain">
+                    <div class="goal-icon">💪</div>
+                    <h4>Muscle Gain</h4>
+                    <p>High protein plans</p>
+                </button>
+                <button class="goal-card glass-card" data-goal="keto">
+                    <div class="goal-icon">🥑</div>
+                    <h4>Keto</h4>
+                    <p>Low carb lifestyle</p>
+                </button>
+            </div>
+
+            <!-- Meal Plan Display -->
+            <div id="meal-plan" class="meal-plan animate-scroll">
+                <!-- Populated by JS -->
+            </div>
+
+            <!-- Macro Tracker -->
+            <div class="macro-tracker glass-card animate-scroll">
+                <h3 class="subsection-title">Daily Macro Breakdown</h3>
+                <div class="macro-rings">
+                    <div class="macro-ring" id="macro-protein">
+                        <svg viewBox="0 0 120 120">
+                            <circle class="ring-bg" cx="60" cy="60" r="52"/>
+                            <circle class="ring-progress protein-ring" cx="60" cy="60" r="52" style="--progress: 0"/>
+                        </svg>
+                        <div class="ring-label">
+                            <span class="ring-value">0g</span>
+                            <span class="ring-name">Protein</span>
+                        </div>
+                    </div>
+                    <div class="macro-ring" id="macro-carbs">
+                        <svg viewBox="0 0 120 120">
+                            <circle class="ring-bg" cx="60" cy="60" r="52"/>
+                            <circle class="ring-progress carbs-ring" cx="60" cy="60" r="52" style="--progress: 0"/>
+                        </svg>
+                        <div class="ring-label">
+                            <span class="ring-value">0g</span>
+                            <span class="ring-name">Carbs</span>
+                        </div>
+                    </div>
+                    <div class="macro-ring" id="macro-fat">
+                        <svg viewBox="0 0 120 120">
+                            <circle class="ring-bg" cx="60" cy="60" r="52"/>
+                            <circle class="ring-progress fat-ring" cx="60" cy="60" r="52" style="--progress: 0"/>
+                        </svg>
+                        <div class="ring-label">
+                            <span class="ring-value">0g</span>
+                            <span class="ring-name">Fat</span>
+                        </div>
+                    </div>
+                    <div class="macro-ring" id="macro-fiber">
+                        <svg viewBox="0 0 120 120">
+                            <circle class="ring-bg" cx="60" cy="60" r="52"/>
+                            <circle class="ring-progress fiber-ring" cx="60" cy="60" r="52" style="--progress: 0"/>
+                        </svg>
+                        <div class="ring-label">
+                            <span class="ring-value">0g</span>
+                            <span class="ring-name">Fiber</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== WORKOUT SECTION ===== -->
+    <section id="workout" class="section workout-section">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-tag animate-scroll">💪 Workout Library</span>
+                <h2 class="section-title animate-scroll">Find Exercises by <span class="gradient-text">Body Part</span></h2>
+                <p class="section-desc animate-scroll">Discover targeted exercises for every muscle group. Build the perfect routine for your fitness goals.</p>
+            </div>
+
+            <!-- Exercise Search -->
+            <div class="search-wrapper animate-scroll">
+                <div class="search-bar glass-card">
+                    <svg class="search-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                    <input type="text" id="exercise-search" placeholder="Search exercises... (e.g., push-up, squat, deadlift)" autocomplete="off">
+                    <button id="exercise-search-btn" class="search-btn">Search</button>
+                </div>
+                <div id="exercise-suggestions" class="suggestions-dropdown"></div>
+            </div>
+
+            <!-- Body Part Selector -->
+            <div class="body-parts animate-scroll">
+                <button class="body-part-btn active" data-part="all">
+                    <span class="bp-icon">🏃</span> All
+                </button>
+                <button class="body-part-btn" data-part="chest">
+                    <span class="bp-icon">🫁</span> Chest
+                </button>
+                <button class="body-part-btn" data-part="back">
+                    <span class="bp-icon">🔙</span> Back
+                </button>
+                <button class="body-part-btn" data-part="shoulders">
+                    <span class="bp-icon">🦾</span> Shoulders
+                </button>
+                <button class="body-part-btn" data-part="arms">
+                    <span class="bp-icon">💪</span> Arms
+                </button>
+                <button class="body-part-btn" data-part="legs">
+                    <span class="bp-icon">🦵</span> Legs
+                </button>
+                <button class="body-part-btn" data-part="core">
+                    <span class="bp-icon">🎯</span> Core
+                </button>
+                <button class="body-part-btn" data-part="cardio">
+                    <span class="bp-icon">❤️</span> Cardio
+                </button>
+            </div>
+
+            <!-- Exercise Cards -->
+            <div id="exercise-grid" class="exercise-grid">
+                <!-- Populated by JS -->
+            </div>
+
+            <div id="auth-modal" class="modal-overlay hidden">
+                <div class="modal-content glass-card auth-modal-content">
+                    <button class="modal-close" id="auth-close-btn">&times;</button>
+                    <div class="auth-modal-header">
+                        <div class="auth-toggle">
+                            <button type="button" class="auth-tab active" data-mode="login">Login</button>
+                            <button type="button" class="auth-tab" data-mode="signup">Sign Up</button>
+                        </div>
+                        <p class="auth-modal-subtitle">Create an account or log in to save your progress.</p>
+                        <div class="auth-social-buttons">
+                            <button type="button" id="auth-google-btn" class="auth-social-btn google">Continue with Google</button>
+                            <button type="button" id="auth-facebook-btn" class="auth-social-btn facebook">Continue with Facebook</button>
+                        </div>
+                    </div>
+                    <div class="auth-forms">
+                        <form id="login-form" class="auth-form">
+                            <label>Username or Email</label>
+                            <input type="text" id="login-identifier" placeholder="Username or email" required>
+                            <label>Password</label>
+                            <input type="password" id="login-password" placeholder="Password" required>
+                            <button type="submit" class="btn btn-primary auth-submit">Login</button>
+                            <p class="auth-switch">New here? <button type="button" class="auth-link" data-target="signup">Create an account</button></p>
+                        </form>
+                        <form id="signup-form" class="auth-form hidden">
+                            <label>Username</label>
+                            <input type="text" id="signup-username" placeholder="Choose a username" required>
+                            <label>Email</label>
+                            <input type="email" id="signup-email" placeholder="your@email.com" required>
+                            <label>Password</label>
+                            <input type="password" id="signup-password" placeholder="Create a password" required>
+                            <button type="submit" class="btn btn-primary auth-submit">Sign Up</button>
+                            <p class="auth-switch">Already have an account? <button type="button" class="auth-link" data-target="login">Login</button></p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercise Detail Modal -->
+            <div id="exercise-modal" class="modal-overlay hidden">
+                <div class="modal-content glass-card">
+                    <button class="modal-close" id="modal-close-btn">&times;</button>
+                    <div id="modal-body">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TRACKER SECTION ===== -->
+    <section id="tracker" class="section tracker-section">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-tag animate-scroll">📊 Daily Tracker</span>
+                <h2 class="section-title animate-scroll">Track Your <span class="gradient-text">Daily Progress</span></h2>
+                <p class="section-desc animate-scroll">Log your meals, workouts, and water intake. Watch your progress unfold day by day.</p>
+            </div>
+
+            <!-- Tracker Dashboard -->
+            <div class="tracker-dashboard animate-scroll">
+                <!-- Today's Summary -->
+                <div class="tracker-card glass-card summary-card">
+                    <h3>Today's Summary</h3>
+                    <div class="summary-date" id="today-date"></div>
+                    <div class="calorie-ring-large">
+                        <svg viewBox="0 0 200 200">
+                            <circle class="ring-bg" cx="100" cy="100" r="85"/>
+                            <circle class="ring-progress main-cal-ring" cx="100" cy="100" r="85" style="--progress: 0"/>
+                        </svg>
+                        <div class="ring-center-label">
+                            <span class="cal-consumed" id="cal-consumed">0</span>
+                            <span class="cal-goal">/ <span id="cal-goal-display">2000</span> cal</span>
+                        </div>
+                    </div>
+                    <div class="summary-macros">
+                        <div class="mini-macro"><span class="mm-dot protein"></span> Protein: <span id="sum-protein">0</span>g</div>
+                        <div class="mini-macro"><span class="mm-dot carbs"></span> Carbs: <span id="sum-carbs">0</span>g</div>
+                        <div class="mini-macro"><span class="mm-dot fat"></span> Fat: <span id="sum-fat">0</span>g</div>
+                    </div>
+                </div>
+
+                <!-- Add Meal -->
+                <div class="tracker-card glass-card add-meal-card">
+                    <h3>Log a Meal</h3>
+                    <div class="meal-type-selector">
+                        <button class="meal-type active" data-type="breakfast">🌅 Breakfast</button>
+                        <button class="meal-type" data-type="lunch">☀️ Lunch</button>
+                        <button class="meal-type" data-type="dinner">🌙 Dinner</button>
+                        <button class="meal-type" data-type="snack">🍎 Snack</button>
+                    </div>
+                    <div class="meal-input-group">
+                        <input type="text" id="meal-food-input" placeholder="Search food to add...">
+                        <div id="meal-food-suggestions" class="suggestions-dropdown"></div>
+                    </div>
+                    <div class="meal-quantity-row">
+                        <div class="qty-field">
+                            <label>Quantity</label>
+                            <input type="number" id="meal-qty" value="1" min="0.1" step="0.1">
+                        </div>
+                        <div class="qty-field">
+                            <label>Serving</label>
+                            <select id="meal-serving">
+                                <option value="1">1 serving</option>
+                                <option value="100">100g</option>
+                                <option value="cup">1 cup</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button id="add-meal-btn" class="btn btn-primary">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                        Add to Log
+                    </button>
+                </div>
+
+                <!-- Meal Log -->
+                <div class="tracker-card glass-card meal-log-card">
+                    <h3>Today's Meal Log</h3>
+                    <div id="meal-log-list" class="meal-log-list">
+                        <div class="empty-log">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                            <p>No meals logged yet today. Start by adding your first meal!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Water Tracker -->
+                <div class="tracker-card glass-card water-card">
+                    <h3>Water Intake 💧</h3>
+                    <div class="water-visual">
+                        <div class="water-bottle">
+                            <div class="water-fill" id="water-fill" style="height: 0%"></div>
+                        </div>
+                        <div class="water-info">
+                            <span class="water-amount" id="water-amount">0</span>
+                            <span class="water-goal">/ 8 glasses</span>
+                        </div>
+                    </div>
+                    <div class="water-buttons">
+                        <button class="water-btn" id="water-add">+ 1 Glass</button>
+                        <button class="water-btn outline" id="water-remove">- 1 Glass</button>
+                    </div>
+                </div>
+
+                <!-- Workout Log -->
+                <div class="tracker-card glass-card workout-log-card">
+                    <h3>Today's Workout</h3>
+                    <div class="workout-log-input">
+                        <input type="text" id="workout-name-input" placeholder="Exercise name...">
+                        <div class="workout-details-row">
+                            <input type="number" id="workout-sets" placeholder="Sets" min="1">
+                            <input type="number" id="workout-reps" placeholder="Reps" min="1">
+                            <input type="number" id="workout-duration" placeholder="Min" min="1">
+                        </div>
+                        <button id="add-workout-btn" class="btn btn-primary">Log Exercise</button>
+                    </div>
+                    <div id="workout-log-list" class="workout-log-list">
+                        <div class="empty-log">
+                            <p>No workouts logged yet today.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- ===== ABOUT SECTION ===== -->
+    <section id="about" class="section about-section">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-tag">👋 About Me</span>
+                <h2 class="section-title">Know <span class="gradient-text">Saurabh Gujar</span></h2>
+                <p class="section-desc">A brief introduction — photo placeholder on the right. I'll add my photo later.</p>
+            </div>
+
+            <div class="about-card glass-card">
+                <div class="about-photo">
+                    <img src="IMG_20260515_075052_228.webp" alt="Saurabh Gujar" class="about-photo-img">
+                </div>
+                <div class="about-info">
+                    <h3>About Me</h3>
+                    <p>My name is Saurabh Gujar. I am a Computer Science Engineering final year student.</p>
+                    <p>Instagram: <a href="https://www.instagram.com/saurabhgujar.1/" target="_blank" rel="noopener">saurabhgujar.1</a></p>
+                    <p>GitHub: <a href="https://github.com/SaurXabh" target="_blank" rel="noopener">SaurXabh</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== DEDICATED ADMIN PANEL ===== -->
+    <section id="admin-panel" class="section admin-panel-section hidden">
+        <div class="section-container">
+            <div class="section-header animate-scroll">
+                <span class="section-tag">🛠️ Owner Panel</span>
+                <h2 class="section-title">Website <span class="gradient-text">Administration</span></h2>
+                <p class="section-desc">Manage site settings, brand configuration, food database, administrative security, and user accounts.</p>
+            </div>
+            
+            <div class="admin-dashboard glass-card">
+                <!-- Sidebar / Navigation Tabs -->
+                <div class="admin-sidebar">
+                    <button class="admin-tab-btn active" data-tab="admin-tab-security">
+                        <span class="tab-icon">🔑</span>
+                        <span class="tab-text">Admin Security</span>
+                    </button>
+                    <button class="admin-tab-btn" data-tab="admin-tab-settings">
+                        <span class="tab-icon">🎨</span>
+                        <span class="tab-text">Site Customizations</span>
+                    </button>
+                    <button class="admin-tab-btn" data-tab="admin-tab-food">
+                        <span class="tab-icon">🍎</span>
+                        <span class="tab-text">Food Database</span>
+                    </button>
+                    <button class="admin-tab-btn" data-tab="admin-tab-users">
+                        <span class="tab-icon">👤</span>
+                        <span class="tab-text">User Management</span>
+                    </button>
+                </div>
+                
+                <!-- Main Dashboard View Container -->
+                <div class="admin-main-content">
+                    
+                    <!-- TAB 1: ADMIN SECURITY -->
+                    <div id="admin-tab-security" class="admin-tab-content active">
+                        <h3>🔑 Change Administrative Credentials</h3>
+                        <p class="tab-subtitle">Update your administrative Username/ID and password to keep your dashboard secure.</p>
+                        <form id="admin-security-form" class="admin-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="admin-new-username">Admin ID (Username)</label>
+                                    <input type="text" id="admin-new-username" placeholder="admin" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="admin-new-password">New Password</label>
+                                    <input type="password" id="admin-new-password" placeholder="••••••••" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="admin-confirm-password">Confirm Password</label>
+                                    <input type="password" id="admin-confirm-password" placeholder="••••••••" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="margin-top: 15px;">Update Credentials</button>
+                        </form>
+                    </div>
+                    
+                    <!-- TAB 2: SITE CUSTOMIZATIONS -->
+                    <div id="admin-tab-settings" class="admin-tab-content">
+                        <h3>🎨 Global Site Customizations</h3>
+                        <p class="tab-subtitle">Change the logo, website title, branding style, or default diet rules for all visitors.</p>
+                        <form id="admin-settings-form" class="admin-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="admin-site-title">Website Title</label>
+                                    <input type="text" id="admin-site-title" placeholder="Saurabh Health" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="admin-logo-emoji">Brand Logo Emoji</label>
+                                    <input type="text" id="admin-logo-emoji" placeholder="💚" maxlength="4" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="admin-default-calories">Default Calorie Goal (Cal/Day)</label>
+                                    <input type="number" id="admin-default-calories" placeholder="2000" min="1000" max="6000" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="margin-top: 15px;">Apply Brand Settings</button>
+                        </form>
+                    </div>
+                    
+                    <!-- TAB 3: FOOD DATABASE -->
+                    <div id="admin-tab-food" class="admin-tab-content">
+                        <h3>🍎 Add Custom Popular Foods</h3>
+                        <p class="tab-subtitle">Introduce custom nutritious options directly to the Popular Foods database for all users.</p>
+                        <form id="admin-food-form" class="admin-form">
+                            <div class="form-row">
+                                <div class="form-group" style="flex: 0.5;">
+                                    <label for="admin-food-emoji">Emoji</label>
+                                    <input type="text" id="admin-food-emoji" placeholder="🍕" maxlength="4" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="admin-food-name">Food Name</label>
+                                    <input type="text" id="admin-food-name" placeholder="Pepperoni Pizza" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="admin-food-serving">Serving Size</label>
+                                    <input type="text" id="admin-food-serving" placeholder="1 slice (100g)" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="admin-food-calories">Calories (kcal)</label>
+                                    <input type="number" id="admin-food-calories" placeholder="290" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="admin-food-protein">Protein (g)</label>
+                                    <input type="number" id="admin-food-protein" placeholder="12" step="0.1" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="admin-food-carbs">Carbs (g)</label>
+                                    <input type="number" id="admin-food-carbs" placeholder="32" step="0.1" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="admin-food-fat">Fat (g)</label>
+                                    <input type="number" id="admin-food-fat" placeholder="12" step="0.1" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="margin-top: 15px;">Add to Popular Foods</button>
+                        </form>
+                    </div>
+                    
+                    <!-- TAB 4: USER MANAGEMENT -->
+                    <div id="admin-tab-users" class="admin-tab-content">
+                        <h3>👤 User Accounts Dashboard</h3>
+                        <p class="tab-subtitle">Suspend abusive accounts, delete test bot accounts, or perform safe factory database resets.</p>
+                        <div class="admin-users-list-container">
+                            <div class="admin-users-list" id="admin-panel-users-list">
+                                <!-- Populated dynamically by app.js -->
+                            </div>
+                        </div>
+                        <div class="admin-danger-zone" style="margin-top: 25px; padding-top: 20px; border-top: 1px dashed rgba(255, 170, 165, 0.2);">
+                            <h4 style="color: var(--pink); font-family: 'Outfit', sans-serif; font-size: 15px; margin-bottom: 8px;">⚠️ Danger Zone</h4>
+                            <button id="admin-panel-reset-btn" class="btn btn-glass" style="border-color: rgba(255,170,165,0.3); color: var(--pink); width: auto;">Reset Entire Database</button>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== PROFILE SECTION ===== -->
+    <section id="profile" class="section profile-section">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-tag animate-scroll">👤 Profile</span>
+                <h2 class="section-title animate-scroll">My <span class="gradient-text">Profile</span></h2>
+                <p class="section-desc animate-scroll">View your account details and saved tracker progress below.</p>
+            </div>
+            <div class="profile-grid animate-scroll">
+                <div class="profile-card glass-card user-card">
+                    <h3>Account Info</h3>
+                    <div class="profile-detail"><strong>Username:</strong> <span id="profile-username">—</span></div>
+                    <div class="profile-detail"><strong>Email:</strong> <span id="profile-email">—</span></div>
+                    <div class="profile-detail"><strong>Status:</strong> <span id="profile-status">Not signed in</span></div>
+                </div>
+                <div class="profile-card glass-card progress-card">
+                    <h3>Progress Overview</h3>
+                    <div class="progress-grid">
+                        <div class="progress-item">
+                            <span class="progress-label">Meals Logged</span>
+                            <strong id="profile-meals-count">0</strong>
+                        </div>
+                        <div class="progress-item">
+                            <span class="progress-label">Workout Entries</span>
+                            <strong id="profile-workouts-count">0</strong>
+                        </div>
+                        <div class="progress-item">
+                            <span class="progress-label">Water Logged</span>
+                            <strong id="profile-water-count">0</strong>
+                        </div>
+                        <div class="progress-item">
+                            <span class="progress-label">Calories Today</span>
+                            <strong id="profile-calories-count">0</strong>
+                        </div>
+                    </div>
+                    <p class="profile-note">Your progress is saved to this account and will load when you log back in.</p>
+                </div>
+                <!-- Admin Control Card -->
+                <div class="profile-card glass-card admin-card hidden" id="profile-admin-card">
+                    <!-- Lock Overlay -->
+                    <div class="admin-lock-overlay" id="admin-lock-overlay">
+                        <div class="lock-content">
+                            <svg class="lock-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+                            </svg>
+                            <h4>Admin Restrictions</h4>
+                            <p>Sign in with Owner/Admin credentials to control this website.</p>
+                        </div>
+                    </div>
+                    <h3>Admin Console 🛠️</h3>
+                    <p class="profile-note" style="margin-top:-10px; margin-bottom:15px; font-size:13px;">Manage mock database accounts, suspend users, delete bots, or reset all storage.</p>
+                    <div class="admin-users-list" id="admin-users-list">
+                        <!-- Populated dynamically by app.js -->
+                    </div>
+                    <button id="admin-reset-btn" class="btn btn-glass" style="margin-top:15px; width:100%; border-color:rgba(255,170,165,0.35); color:var(--pink); font-size:13px; padding:10px 14px;">Reset Database</button>
+                </div>
+            </div>
+            <div class="profile-message glass-card hidden" id="profile-message">
+                <p>Please login or sign up to see your profile and progress here.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <span class="logo-icon">💚</span>
+                <span class="logo-text">Saurabh<span class="logo-accent">Health</span></span>
+                <p class="footer-tagline">Your premium health companion for a better tomorrow.</p>
+            </div>
+            <div class="footer-links-grid">
+                <div class="footer-col">
+                    <h4>Features</h4>
+                    <a href="#calories">Calorie Search</a>
+                    <a href="#diet">Diet Plans</a>
+                    <a href="#workout">Workouts</a>
+                    <a href="#tracker">Daily Tracker</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <a href="#">Nutrition Guide</a>
+                    <a href="#">Workout Tips</a>
+                    <a href="#">Health Blog</a>
+                    <a href="#">FAQ</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Connect</h4>
+                    <a href="https://www.instagram.com/saurabhgujar.1/" target="_blank" rel="noopener">Instagram</a>
+                    <a href="#">Twitter</a>
+                    <a href="#">YouTube</a>
+                    <a href="#">Discord</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Saurabh Health. Built with ❤️ for a healthier world.</p>
+        </div>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
